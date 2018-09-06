@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+
+</head>
+<body>
+  <h1>Sunsurance </h1>
+<div class="login-page">
+    <div class="form" id="blockchain">
+        <form class="login-form" action="" method="post">
+            <label for="date">Date</label>
+            <input type="number" name="date" id="date" placeholder="20180101"/>
+            <label for="amount">Amount</label>
+            <input type="text" name="amount" id="amount" placeholder="amount"/>
+            <button class="set">send</button>
+            <button class="winnings">Claim your Earnings</button>
+            <!-- <button class="getStats">Get Statistics</button> -->
+            <!-- <button class="reset">Reset</button> -->
+            <div id="response"></div>
+        </form>
+          </div>
+        </div>
+
+<script>
+
+web3 = new Web3(web3.currentProvider);
+// web3.setProvider(new web3.providers.HttpProvider("localhost:8545"));
+//  web3.setProvider(new web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+
+
+    var sampleContractABI = [ { "constant": false, "inputs": [], "name": "payUsers", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "userInfo", "outputs": [ { "name": "amountBet", "type": "uint256" }, { "name": "dateSelected", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "myid", "type": "bytes32" }, { "name": "result", "type": "string" } ], "name": "__callback", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "users", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "myid", "type": "bytes32" }, { "name": "result", "type": "string" }, { "name": "proof", "type": "bytes" } ], "name": "__callback", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "temperatureToday", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getTemperature", "outputs": [ { "name": "", "type": "uint256[]" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "date", "type": "uint256" } ], "name": "bet", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "sumBets", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "winners", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "today", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "totalUsers", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "reset", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "temperatureAverage", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" } ]
+
+  //  web3.eth.defaultAccount="0x4b72833013bbd9b2abb4d8af5275927b4cbc28af";
+    var sampleContract = web3.eth.contract(sampleContractABI);
+
+    var sampleContractInstance = sampleContract.at("0xb23ccff8c8f3f72da400967f454196b5f0a2796e");
+
+  $("#blockchain button.set").click(function() {
+      var date = $("#date").val();
+  // var date = document.getElementById("date").value;
+      var amountInput = $("#amount").val();
+      var amount = web3.toWei(amountInput, "ether")
+      //  var params = { gas: 300000, from: web3.eth.accounts[0], value: amount, to: "0x73be328fbcf49f1eecbf035fb9a0ef6938a6c867" }
+        sampleContractInstance.bet.sendTransaction(date, {
+          gas: 300000,
+          from: web3.eth.accounts[0],
+        //  from: "0x839E8388aa523845a9b1Cadc96361A9D804c6CA0",
+          value: amount,
+          to: sampleContractInstance
+        },function(error, result){
+    if(!error)
+        console.log(JSON.stringify(result));
+    else
+        console.error(error);
+})
+
+  });
+
+  $("#blockchain button.winnings").click(function() {
+    sampleContractInstance.payUsers.sendTransaction({gas: 300000},
+      function(error, result){
+  if(!error)
+      console.log(JSON.stringify(result));
+  else
+      console.error(error);
+  });
+});
+
+// $("#blockchain button.getStats").click(function() {
+//   getStats();
+// });
+// async function getStats() {
+// var values = new Promise (function (resolve, reject) {
+//    sampleContractInstance.getTemperature(function (error, result) {
+//     if (error) {
+//       reject(error);
+//     } else {
+//       resolve(result);
+//   }
+// })});
+//       result = await values;
+//       document.getElementById("testid").innerHTML = result;
+// }
+
+
+  //  $("#blockchain button.payout").click(function() {
+    //    var params = { from: myAccount, gas: 2000 }
+        // // TODO: check sendTransaction
+      //  sampleContractInstance.payout.sendTransaction(params);
+//    });
+
+// $("#blockchain button.reset").click(function() {
+//   sampleContractInstance.reset.sendTransaction({gas:300000},
+//     function(error, result){
+// if(!error)
+//     console.log(JSON.stringify(result));
+// else
+//     console.error(error);
+// });
+// });
+
+</script>
+</body>
+</html>
