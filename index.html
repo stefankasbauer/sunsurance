@@ -10,9 +10,11 @@
 </head>
 <body>
   <h1>Sunsurance </h1>
+  <p align=center>Prototype: Working with Metamask only. </p>
 <div class="login-page">
     <div class="form" id="blockchain">
         <form class="login-form" action="" method="post">
+          <p> Receive compensation in the case of bad weather. The processes all run via a smart contract in the ether blockchain. </p>
             <label for="date">Date</label>
             <input type="number" name="date" id="date" placeholder="20180101"/>
             <label for="amount">Amount</label>
@@ -22,7 +24,9 @@
             <!-- <button class="getStats">Get Statistics</button> -->
             <!-- <button class="reset">Reset</button> -->
             <div id="response"></div>
-        </form>
+          </br>
+            <a href="https://github.com/stefankasbauer/sunsurance">Code can be found here</a>
+      </form>
           </div>
         </div>
 
@@ -38,7 +42,7 @@ web3 = new Web3(web3.currentProvider);
   //  web3.eth.defaultAccount="0x4b72833013bbd9b2abb4d8af5275927b4cbc28af";
     var sampleContract = web3.eth.contract(sampleContractABI);
 
-    var sampleContractInstance = sampleContract.at("0xb23ccff8c8f3f72da400967f454196b5f0a2796e");
+    var sampleContractInstance = sampleContract.at("0x6300a357d54d1bd7540d35ab202d5d3e5b527a6b");
 
   $("#blockchain button.set").click(function() {
       var date = $("#date").val();
